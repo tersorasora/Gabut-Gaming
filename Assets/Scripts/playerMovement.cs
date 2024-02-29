@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 public class playerMovement : MonoBehaviour
 {
@@ -14,14 +15,14 @@ public class playerMovement : MonoBehaviour
     float tempGravity;
     Animator animator;
     CapsuleCollider2D playerCollider;
-
-    private bool isJumping = false;
+    BoxCollider2D playerFeetCollider;
 
     void Start()
     {
         playerRB = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<CapsuleCollider2D>();
+        playerFeetCollider = GetComponent<BoxCollider2D>();
         tempGravity = playerRB.gravityScale;
     }
 
@@ -29,8 +30,8 @@ public class playerMovement : MonoBehaviour
     void Update()
     {
         Walk();
-        flipSprite();
-        Climbingladder();
+            flipSprite();
+            Climbingladder();
     }
 
     void OnMove(InputValue value){
@@ -38,22 +39,30 @@ public class playerMovement : MonoBehaviour
     }
 
     void Walk(){
+        if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
+            if(moveInput.x < 0 && transform.localScale.x < 0){
+                animator.SetBool("isWalking", false);
+                return ;
+            }else if(moveInput.x > 0 && transform.localScale.x > 0){
+                animator.SetBool("isWalking", false);
+                return;
+            }
+        }
+
         bool walkingTrue = Mathf.Abs(playerRB.velocity.x) > Mathf.Epsilon;
 
         Vector2 playerVelocity = new Vector2(moveInput.x * speed, playerRB.velocity.y);
         playerRB.velocity = playerVelocity;
         
         animator.SetBool("isWalking", walkingTrue);
-    }
-
-    void OnJump(InputValue value){
-        if(value.isPressed && !isJumping){
-            playerRB.velocity += new Vector2(0f, jumpForce);
-            isJumping = true;
-        }
+        
     }
 
     void flipSprite(){
+        if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
+            return;
+        }
+
         bool horizontalSpeed = Mathf.Abs(playerRB.velocity.x) > Mathf.Epsilon;
 
         if(horizontalSpeed == true){
@@ -61,20 +70,23 @@ public class playerMovement : MonoBehaviour
         }
     }
 
+    void OnJump(InputValue value){
+        if(!playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
+            return;
+        }
+        if(value.isPressed){
+            playerRB.velocity += new Vector2(0f, jumpForce);
+        }
+    }
+
     void Climbingladder(){
-        if(!playerCollider.IsTouchingLayers(LayerMask.GetMask("Climbing"))){
+        if(!playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Climbing"))){
             playerRB.gravityScale = tempGravity;
             return;
         }else{
             Vector2 climbVelocity = new Vector2(playerRB.velocity.x, moveInput.y * climbSpeed);
             playerRB.velocity = climbVelocity;
             playerRB.gravityScale = 0f;
-        }
-    }
-
-    void OnCollisionEnter2D(Collision2D other) {
-        if(other.gameObject.CompareTag("Ground")){
-            isJumping = false;
         }
     }
 }
