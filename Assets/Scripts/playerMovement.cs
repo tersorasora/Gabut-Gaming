@@ -16,6 +16,7 @@ public class playerMovement : MonoBehaviour
     Animator animator;
     CapsuleCollider2D playerCollider;
     BoxCollider2D playerFeetCollider;
+    AudioSource jumpSound;
 
     void Start()
     {
@@ -23,6 +24,7 @@ public class playerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<CapsuleCollider2D>();
         playerFeetCollider = GetComponent<BoxCollider2D>();
+        jumpSound = GetComponent<AudioSource>();
         tempGravity = playerRB.gravityScale;
     }
 
@@ -75,6 +77,7 @@ public class playerMovement : MonoBehaviour
             return;
         }
         if(value.isPressed){
+            jumpSound.Play();
             playerRB.velocity += new Vector2(0f, jumpForce);
         }
     }
