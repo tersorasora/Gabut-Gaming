@@ -41,15 +41,15 @@ public class playerMovement : MonoBehaviour
     }
 
     void Walk(){
-        if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
-            if(moveInput.x < 0 && transform.localScale.x < 0){
-                animator.SetBool("isWalking", false);
-                return ;
-            }else if(moveInput.x > 0 && transform.localScale.x > 0){
-                animator.SetBool("isWalking", false);
-                return;
-            }
-        }
+        // if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
+        //     if(moveInput.x < 0 && transform.localScale.x < 0){
+        //         animator.SetBool("isWalking", false);
+        //         return ;
+        //     }else if(moveInput.x > 0 && transform.localScale.x > 0){
+        //         animator.SetBool("isWalking", false);
+        //         return;
+        //     }
+        // }
 
         bool walkingTrue = Mathf.Abs(playerRB.velocity.x) > Mathf.Epsilon;
 
@@ -61,9 +61,9 @@ public class playerMovement : MonoBehaviour
     }
 
     void flipSprite(){
-        if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
-            return;
-        }
+        // if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
+        //     return;
+        // }
 
         bool horizontalSpeed = Mathf.Abs(playerRB.velocity.x) > Mathf.Epsilon;
 
