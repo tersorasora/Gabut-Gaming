@@ -12,11 +12,14 @@ public class playerMovement : MonoBehaviour
     [SerializeField] float speed = 2f;
     [SerializeField] float jumpForce = 5f;
     [SerializeField] float climbSpeed = 2f;
+    [SerializeField] float dashSpeed = 20f;
     float tempGravity;
     Animator animator;
     CapsuleCollider2D playerCollider;
     BoxCollider2D playerFeetCollider;
     AudioSource jumpSound;
+    float dashCooldown = 2f;
+    bool dashAble = true;
 
     void Start()
     {
@@ -58,6 +61,20 @@ public class playerMovement : MonoBehaviour
         
         animator.SetBool("isWalking", walkingTrue);
         
+    }
+
+    void OnDash(InputValue value){
+        if(value.isPressed && dashAble){
+            Vector2 dashDirection = new Vector2(moveInput.x, 0f).normalized;
+            playerRB.velocity = dashDirection * dashSpeed;
+            dashAble = false;
+            StartCoroutine(DashCooldown());
+        }
+    }
+
+    IEnumerator DashCooldown(){
+        yield return new WaitForSeconds(dashCooldown);
+        dashAble = true;
     }
 
     void flipSprite(){
