@@ -13,13 +13,17 @@ public class playerMovement : MonoBehaviour
     [SerializeField] float jumpForce = 5f;
     [SerializeField] float climbSpeed = 2f;
     [SerializeField] float dashSpeed = 20f;
+    [SerializeField] TrailRenderer dashTrail;
+    [SerializeField] AudioClip jumpSfx, dashSfx, walkSfx;
     float tempGravity;
     Animator animator;
     CapsuleCollider2D playerCollider;
     BoxCollider2D playerFeetCollider;
-    AudioSource jumpSound;
+    public AudioSource audioSource;
     float dashCooldown = 2f;
+    float dashTime = 0.2f;
     bool dashAble = true;
+    bool isDashing;
 
     void Start()
     {
@@ -27,16 +31,20 @@ public class playerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<CapsuleCollider2D>();
         playerFeetCollider = GetComponent<BoxCollider2D>();
-        jumpSound = GetComponent<AudioSource>();
+        // audioSource = GetComponent<AudioSource>();
         tempGravity = playerRB.gravityScale;
     }
 
     
     void Update()
     {
+        if(isDashing){
+            return;
+        }
+
         Walk();
-            flipSprite();
-            Climbingladder();
+        flipSprite();
+        Climbingladder();
     }
 
     void OnMove(InputValue value){
@@ -44,36 +52,43 @@ public class playerMovement : MonoBehaviour
     }
 
     void Walk(){
-        // if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
-        //     if(moveInput.x < 0 && transform.localScale.x < 0){
-        //         animator.SetBool("isWalking", false);
-        //         return ;
-        //     }else if(moveInput.x > 0 && transform.localScale.x > 0){
-        //         animator.SetBool("isWalking", false);
-        //         return;
-        //     }
-        // }
-
         bool walkingTrue = Mathf.Abs(playerRB.velocity.x) > Mathf.Epsilon;
 
         Vector2 playerVelocity = new Vector2(moveInput.x * speed, playerRB.velocity.y);
         playerRB.velocity = playerVelocity;
-        
         animator.SetBool("isWalking", walkingTrue);
-        
+        if(walkingTrue && playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
+            if(!audioSource.isPlaying){
+                audioSource.clip = walkSfx;
+                audioSource.Play();
+            }
+        }else{
+            audioSource.Stop();
+        }
     }
 
     void OnDash(InputValue value){
         if(value.isPressed && dashAble){
-            Vector2 dashDirection = new Vector2(moveInput.x, 0f).normalized;
-            playerRB.velocity = dashDirection * dashSpeed;
-            dashAble = false;
-            StartCoroutine(DashCooldown());
+            // Debug.Log("Dash");
+            StartCoroutine(DashNow());
         }
     }
 
-    IEnumerator DashCooldown(){
-        yield return new WaitForSeconds(dashCooldown);
+    IEnumerator DashNow(){
+        float originalGravity = playerRB.gravityScale; // supaya kalo dash nya diatas agak ngambang bentar
+        playerRB.gravityScale = 0f;
+        dashAble = false; // supaya gk bisa dash lagi
+        isDashing = true; // lagi ngedash
+        Vector2 playerDashVelocity = new Vector2(moveInput.x * dashSpeed, 0f);
+        audioSource.clip = dashSfx;
+        audioSource.Play();
+        playerRB.velocity = playerDashVelocity;
+        dashTrail.emitting = true; // trailnya muncul
+        yield return new WaitForSeconds(dashTime); // berapa lama waktu ngedashnya
+        playerRB.gravityScale = originalGravity; // balikin gravity ke semula
+        isDashing = false; // gk lagi ngedash
+        dashTrail.emitting = false; // trailnya ilang
+        yield return new WaitForSeconds(dashCooldown); // berapa lama cooldownnya
         dashAble = true;
     }
 
@@ -94,7 +109,8 @@ public class playerMovement : MonoBehaviour
             return;
         }
         if(value.isPressed){
-            jumpSound.Play();
+            audioSource.clip = jumpSfx;
+            audioSource.Play();
             playerRB.velocity += new Vector2(0f, jumpForce);
         }
     }
