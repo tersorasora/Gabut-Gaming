@@ -31,7 +31,6 @@ public class playerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<CapsuleCollider2D>();
         playerFeetCollider = GetComponent<BoxCollider2D>();
-        // audioSource = GetComponent<AudioSource>();
         tempGravity = playerRB.gravityScale;
     }
 
@@ -41,7 +40,6 @@ public class playerMovement : MonoBehaviour
         if(isDashing){
             return;
         }
-
         Walk();
         flipSprite();
         Climbingladder();
@@ -68,8 +66,9 @@ public class playerMovement : MonoBehaviour
     }
 
     void OnDash(InputValue value){
-        if(value.isPressed && dashAble){
+        if(value.isPressed && dashAble && moveInput != Vector2.zero){
             // Debug.Log("Dash");
+            animator.SetBool("isWalking", false);
             StartCoroutine(DashNow());
         }
     }
@@ -84,7 +83,9 @@ public class playerMovement : MonoBehaviour
         audioSource.Play();
         playerRB.velocity = playerDashVelocity;
         dashTrail.emitting = true; // trailnya muncul
+        animator.SetTrigger("isDashing"); // animasi dash
         yield return new WaitForSeconds(dashTime); // berapa lama waktu ngedashnya
+        animator.ResetTrigger("isDashing"); // reset animasi
         playerRB.gravityScale = originalGravity; // balikin gravity ke semula
         isDashing = false; // gk lagi ngedash
         dashTrail.emitting = false; // trailnya ilang
@@ -93,10 +94,6 @@ public class playerMovement : MonoBehaviour
     }
 
     void flipSprite(){
-        // if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
-        //     return;
-        // }
-
         bool horizontalSpeed = Mathf.Abs(playerRB.velocity.x) > Mathf.Epsilon;
 
         if(horizontalSpeed == true){
@@ -108,11 +105,15 @@ public class playerMovement : MonoBehaviour
         if(!playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
             return;
         }
-        if(value.isPressed){
-            audioSource.clip = jumpSfx;
-            audioSource.Play();
-            playerRB.velocity += new Vector2(0f, jumpForce);
+        else if(value.isPressed){
+            jump();
         }
+    }
+
+    void jump(){
+        audioSource.clip = jumpSfx;
+        audioSource.Play();
+        playerRB.velocity += new Vector2(0f, jumpForce);
     }
 
     void Climbingladder(){
