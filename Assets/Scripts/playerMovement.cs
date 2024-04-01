@@ -14,7 +14,7 @@ public class playerMovement : MonoBehaviour
     [SerializeField] float climbSpeed = 2f;
     [SerializeField] float dashSpeed = 20f;
     [SerializeField] TrailRenderer dashTrail;
-    [SerializeField] AudioClip jumpSfx, dashSfx, walkSfx;
+    [SerializeField] AudioClip jumpSfx, dashSfx, walkSfx, hitSfx;
     float tempGravity;
     Animator animator;
     CapsuleCollider2D playerCollider;
@@ -24,6 +24,7 @@ public class playerMovement : MonoBehaviour
     float dashTime = 0.2f;
     bool dashAble = true;
     bool isDashing;
+    bool isAlive = true;
 
     void Start()
     {
@@ -40,12 +41,19 @@ public class playerMovement : MonoBehaviour
         if(isDashing){
             return;
         }
+        if(!isAlive){
+            return;
+        }
         Walk();
         flipSprite();
         Climbingladder();
+        die();
     }
 
     void OnMove(InputValue value){
+        if(!isAlive){
+            return;
+        }
         moveInput = value.Get<Vector2>();
     }
 
@@ -66,6 +74,9 @@ public class playerMovement : MonoBehaviour
     }
 
     void OnDash(InputValue value){
+        if(!isAlive){
+            return;
+        }
         if(value.isPressed && dashAble && moveInput != Vector2.zero){
             // Debug.Log("Dash");
             animator.SetBool("isWalking", false);
@@ -102,6 +113,9 @@ public class playerMovement : MonoBehaviour
     }
 
     void OnJump(InputValue value){
+        if(!isAlive){
+            return;
+        }
         if(!playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
             return;
         }
@@ -124,6 +138,16 @@ public class playerMovement : MonoBehaviour
             Vector2 climbVelocity = new Vector2(playerRB.velocity.x, moveInput.y * climbSpeed);
             playerRB.velocity = climbVelocity;
             playerRB.gravityScale = 0f;
+        }
+    }
+
+    void die(){
+        if(playerCollider.IsTouchingLayers(LayerMask.GetMask("enemy", "Spikes"))){
+            audioSource.clip = hitSfx;
+            audioSource.Play();
+            isAlive = false;
+            animator.SetBool("isWalking", false);
+            animator.SetTrigger("isDying");
         }
     }
 }

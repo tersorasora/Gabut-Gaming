@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 30eec413a86d17f48a321227edf13f64
+guid: 7360dc52d80d98346851a3a97c37a5c2
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -123,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: skeleton_idle_128_0
+      name: samurai_dead_0
       rect:
         serializedVersion: 2
-        x: 28
-        y: 164
-        width: 46
-        height: 78
+        x: 5
+        y: 143
+        width: 43
+        height: 41
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,20 +137,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9af39c538290fd2448146c9bbec0d9f8
-      internalID: 1360487186
+      spriteID: 3ddd9ed9300daac43b6acb3b12230a4c
+      internalID: -491158646
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skeleton_idle_128_1
+      name: samurai_dead_1
       rect:
         serializedVersion: 2
-        x: 156
-        y: 164
-        width: 44
-        height: 80
+        x: 69
+        y: 143
+        width: 43
+        height: 41
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -158,20 +158,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 949ab639038ce4c48b8c68f99b58fab8
-      internalID: 497051932
+      spriteID: 5c580c0aa7093064fab3c481ded8d7d9
+      internalID: 1896242877
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skeleton_idle_128_2
+      name: samurai_dead_2
       rect:
         serializedVersion: 2
-        x: 26
-        y: 36
-        width: 40
-        height: 78
+        x: 5
+        y: 78
+        width: 43
+        height: 41
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -179,20 +179,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0f1ae4b9debffb347af388add6ceebe1
-      internalID: -865405461
+      spriteID: 15c2657ad9a24a34d96b307f340a3993
+      internalID: 578576442
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skeleton_idle_128_3
+      name: samurai_dead_3
       rect:
         serializedVersion: 2
-        x: 156
-        y: 36
-        width: 44
-        height: 80
+        x: 69
+        y: 77
+        width: 43
+        height: 41
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,8 +200,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: feffad4923b59b1448cc315c49f389a8
-      internalID: 308835217
+      spriteID: 8f154fa8d77137d42b705416356b3838
+      internalID: -800855132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: samurai_dead_4
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 11
+        width: 43
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76577c895d4d4604c8e974a60c92a282
+      internalID: -1866202734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: samurai_dead_5
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 11
+        width: 43
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 147a784365ddc4243afd8b9ba59e2cbe
+      internalID: 1407434390
       vertices: []
       indices: 
       edges: []
@@ -217,10 +259,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      skeleton_idle_128_0: 1360487186
-      skeleton_idle_128_1: 497051932
-      skeleton_idle_128_2: -865405461
-      skeleton_idle_128_3: 308835217
+      samurai_dead_0: -491158646
+      samurai_dead_1: 1896242877
+      samurai_dead_2: 578576442
+      samurai_dead_3: -800855132
+      samurai_dead_4: -1866202734
+      samurai_dead_5: 1407434390
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
