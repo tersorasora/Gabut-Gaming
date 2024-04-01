@@ -15,6 +15,8 @@ public class playerMovement : MonoBehaviour
     [SerializeField] float dashSpeed = 20f;
     [SerializeField] TrailRenderer dashTrail;
     [SerializeField] AudioClip jumpSfx, dashSfx, walkSfx, hitSfx;
+    [SerializeField] GameObject Shuriken;
+    [SerializeField] Transform ShurikenSpawnPoint;
     float tempGravity;
     Animator animator;
     CapsuleCollider2D playerCollider;
@@ -70,6 +72,15 @@ public class playerMovement : MonoBehaviour
             }
         }else{
             audioSource.Stop();
+        }
+    }
+
+    void OnFire(InputValue value){
+        if(!isAlive){
+            return;
+        }
+        if(value.isPressed){
+            Instantiate(Shuriken, ShurikenSpawnPoint.position, transform.rotation);
         }
     }
 
