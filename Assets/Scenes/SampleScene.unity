@@ -1149,6 +1149,7 @@ MonoBehaviour:
   dashSfx: {fileID: 8300000, guid: 7d3b6e3c773d0fd44b288ea48107eb66, type: 3}
   walkSfx: {fileID: 8300000, guid: dc48ee3a32a5fc54b9bf05e8f81b29f6, type: 3}
   hitSfx: {fileID: 8300000, guid: 4be5f553159fdf24c9e6ad82f86b6855, type: 3}
+  throwSfx: {fileID: 8300000, guid: a96dc99a88642ff4d994d7d836e59c8b, type: 3}
   Shuriken: {fileID: 307216207618127570, guid: 179ac848c19a64f4894fd32a43d0adad, type: 3}
   ShurikenSpawnPoint: {fileID: 670821756}
   audioSource: {fileID: 707878286}

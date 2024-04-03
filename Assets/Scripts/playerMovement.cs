@@ -14,19 +14,20 @@ public class playerMovement : MonoBehaviour
     [SerializeField] float climbSpeed = 2f;
     [SerializeField] float dashSpeed = 20f;
     [SerializeField] TrailRenderer dashTrail;
-    [SerializeField] AudioClip jumpSfx, dashSfx, walkSfx, hitSfx;
+    [SerializeField] AudioClip jumpSfx, dashSfx, walkSfx, hitSfx, throwSfx;
     [SerializeField] GameObject Shuriken;
     [SerializeField] Transform ShurikenSpawnPoint;
     float tempGravity;
     Animator animator;
     CapsuleCollider2D playerCollider;
     BoxCollider2D playerFeetCollider;
-    public AudioSource audioSource;
+    public AudioSource audioSource, walkAudioSource;
     float dashCooldown = 2f;
     float dashTime = 0.2f;
     bool dashAble = true;
     bool isDashing;
     bool isAlive = true;
+    bool canShoot = true;
 
     void Start()
     {
@@ -66,12 +67,12 @@ public class playerMovement : MonoBehaviour
         playerRB.velocity = playerVelocity;
         animator.SetBool("isWalking", walkingTrue);
         if(walkingTrue && playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
-            if(!audioSource.isPlaying){
-                audioSource.clip = walkSfx;
-                audioSource.Play();
+            if(!walkAudioSource.isPlaying){
+                walkAudioSource.clip = walkSfx;
+                walkAudioSource.Play();
             }
         }else{
-            audioSource.Stop();
+            walkAudioSource.Stop();
         }
     }
 
@@ -79,9 +80,31 @@ public class playerMovement : MonoBehaviour
         if(!isAlive){
             return;
         }
-        if(value.isPressed){
-            Instantiate(Shuriken, ShurikenSpawnPoint.position, transform.rotation);
+        if(value.isPressed && canShoot && !isDashing && animator.GetBool("isWalking") == false){
+            audioSource.Stop();
+            canShoot = false;
+            animator.SetTrigger("isThrowing");
+            audioSource.clip = throwSfx;
+            audioSource.Play();
+            StartCoroutine(projectilesDelay());
+            StartCoroutine(resetThrow());
+            StartCoroutine(waitShoot());
         }
+    }
+
+    IEnumerator projectilesDelay(){
+        yield return new WaitForSeconds(0.2f);
+        Instantiate(Shuriken, ShurikenSpawnPoint.position, transform.rotation);
+    }
+
+    IEnumerator resetThrow(){
+        yield return new WaitForSeconds(0.5f);
+        animator.SetTrigger("stopThrowing");
+    }
+
+    IEnumerator waitShoot(){
+        yield return new WaitForSeconds(3f);
+        canShoot = true;
     }
 
     void OnDash(InputValue value){
@@ -130,14 +153,13 @@ public class playerMovement : MonoBehaviour
         if(!playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
             return;
         }
-        else if(value.isPressed){
+        if(value.isPressed){
             jump();
         }
     }
 
     void jump(){
-        audioSource.clip = jumpSfx;
-        audioSource.Play();
+        audioSource.PlayOneShot(jumpSfx);
         playerRB.velocity += new Vector2(0f, jumpForce);
     }
 
