@@ -10,15 +10,15 @@ public class ShurikenThrowed : MonoBehaviour
     [SerializeField] float rotationSpeed = 3f;
     [SerializeField] AudioClip killSfx, crashSfx;
     public AudioSource shurikenAudioSource;
-    playerMovement arahPlayer;
+    playerMovement Player;
     float xShuriken;
     float xRotation;
     void Start()
     {
         shurikenRB = GetComponent<Rigidbody2D>();
-        arahPlayer = FindObjectOfType<playerMovement>();
-        xShuriken = arahPlayer.transform.localScale.x * shurikenSpeed;
-        xRotation = arahPlayer.transform.localScale.x * rotationSpeed;
+        Player = FindObjectOfType<playerMovement>();
+        xShuriken = Player.transform.localScale.x * shurikenSpeed;
+        xRotation = Player.transform.localScale.x * rotationSpeed;
     }
 
     // Update is called once per frame
@@ -30,22 +30,16 @@ public class ShurikenThrowed : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
         if(other.tag == "Enemy"){
-            if(shurikenAudioSource.enabled){
-                Debug.Log("Audio enabled");
-                shurikenAudioSource.clip = killSfx;
-                shurikenAudioSource.Play();
-            }
+            Player.audioSource.clip = killSfx;
+            Player.audioSource.Play();
             Destroy(other.gameObject);
             Destroy(gameObject);
         }
     }
 
     void OnCollisionEnter2D(Collision2D other) {
-            if(shurikenAudioSource.enabled){
-                Debug.Log("breaks enabled");
-                shurikenAudioSource.clip = crashSfx;
-                shurikenAudioSource.Play();
-            }
+            Player.audioSource.clip = crashSfx;
+            Player.audioSource.Play();
             Destroy(gameObject);
     }
 }

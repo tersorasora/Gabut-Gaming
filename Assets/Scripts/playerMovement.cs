@@ -8,6 +8,7 @@ using UnityEngine.Windows;
 public class playerMovement : MonoBehaviour
 {
     Vector2 moveInput;
+    int lastDirection = 1;
     Rigidbody2D playerRB;
     [SerializeField] float speed = 2f;
     [SerializeField] float jumpForce = 5f;
@@ -58,6 +59,9 @@ public class playerMovement : MonoBehaviour
             return;
         }
         moveInput = value.Get<Vector2>();
+        if(moveInput.x != 0){
+            lastDirection = (int)moveInput.x;
+        }
     }
 
     void Walk(){
@@ -111,8 +115,7 @@ public class playerMovement : MonoBehaviour
         if(!isAlive){
             return;
         }
-        if(value.isPressed && dashAble && moveInput != Vector2.zero){
-            // Debug.Log("Dash");
+        if(value.isPressed && dashAble){
             animator.SetBool("isWalking", false);
             StartCoroutine(DashNow());
         }
@@ -123,7 +126,7 @@ public class playerMovement : MonoBehaviour
         playerRB.gravityScale = 0f;
         dashAble = false; // supaya gk bisa dash lagi
         isDashing = true; // lagi ngedash
-        Vector2 playerDashVelocity = new Vector2(moveInput.x * dashSpeed, 0f);
+        Vector2 playerDashVelocity = new Vector2(lastDirection * dashSpeed, 0f);
         audioSource.clip = dashSfx;
         audioSource.Play();
         playerRB.velocity = playerDashVelocity;

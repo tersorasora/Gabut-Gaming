@@ -283,6 +283,17 @@
                 },
                 {
                     "name": "",
+                    "id": "45817b32-36fd-4b34-8c91-17bc424edbcd",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "0120b803-44d2-4e90-9d25-9b86907e120f",
                     "path": "<Keyboard>/space",
                     "interactions": "",
